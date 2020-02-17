@@ -19,6 +19,7 @@ const TAGS_INPUT_TEMPLATE = `
             type="text" 
             [placeholder]="getPlaceholder()"
             name="tags"
+            (keyup)="keyDownEvent($event, tagInput)"
             (keyup.enter)="addTag(tagInput)" (keydown.backspace)="removeLastTag(tagInput)"
             [disabled]="!canAddTags || maximumOfTagsReached()"
             [hidden]="!canAddTags || maximumOfTagsReached()"
@@ -155,6 +156,13 @@ export class NgxTagsInputComponent implements ControlValueAccessor {
           this.addPredefinedTag(tag);
       }
       tagInput.value = '';
+  }
+
+  keyDownEvent(event: any, tagInput: HTMLInputElement): void {
+      if (event.which === 188) {
+        tagInput.value = tagInput.value.slice(0, -1);
+        this.addTag(tagInput);
+      }
   }
 
   private addPredefinedTag(tag: Object): void {
